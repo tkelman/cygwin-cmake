@@ -1,5 +1,5 @@
---- origsrc/cmake-2.8.10/Source/cmFileCommand.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-2.8.10/Source/cmFileCommand.cxx	2013-03-16 22:55:11.306681100 -0500
+--- origsrc/cmake-3.0.2/Source/cmFileCommand.cxx	2012-10-31 10:32:06.000000000 -0500
++++ src/cmake-3.0.2/Source/cmFileCommand.cxx	2013-03-16 22:55:11.306681100 -0500
 @@ -1002,7 +1002,7 @@ protected:
    MatchProperties CollectMatchProperties(const char* file)
      {
@@ -9,8 +9,8 @@
      std::string lower = cmSystemTools::LowerCase(file);
      const char* file_to_match = lower.c_str();
  #else
---- origsrc/cmake-2.8.10/Source/cmInstallCommand.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-2.8.10/Source/cmInstallCommand.cxx	2013-03-16 22:56:21.008667800 -0500
+--- origsrc/cmake-3.0.2/Source/cmInstallCommand.cxx	2012-10-31 10:32:06.000000000 -0500
++++ src/cmake-3.0.2/Source/cmInstallCommand.cxx	2013-03-16 22:56:21.008667800 -0500
 @@ -1090,7 +1090,7 @@ cmInstallCommand::HandleDirectoryMode(st
        {
        literal_args += " REGEX \"";
@@ -20,8 +20,8 @@
        std::string regex = cmSystemTools::LowerCase(args[i]);
  #else
        std::string regex = args[i];
---- origsrc/cmake-2.8.10/Source/kwsys/Glob.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-2.8.10/Source/kwsys/Glob.cxx	2013-03-16 22:58:54.192429400 -0500
+--- origsrc/cmake-3.0.2/Source/kwsys/Glob.cxx	2012-10-31 10:32:06.000000000 -0500
++++ src/cmake-3.0.2/Source/kwsys/Glob.cxx	2013-03-16 22:58:54.192429400 -0500
 @@ -37,7 +37,7 @@
  #include <string.h>
  namespace KWSYS_NAMESPACE
@@ -119,12 +119,12 @@
    return getpid();
  #else
    return -1;
---- origsrc/cmake-2.8.10/Source/kwsys/SystemTools.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-2.8.10/Source/kwsys/SystemTools.cxx	2013-03-16 22:52:11.830415600 -0500
+--- origsrc/cmake-3.0.2/Source/kwsys/SystemTools.cxx	2012-10-31 10:32:06.000000000 -0500
++++ src/cmake-3.0.2/Source/kwsys/SystemTools.cxx	2013-03-16 22:52:11.830415600 -0500
 @@ -75,19 +75,12 @@
- // Windows API.
- #if defined(_WIN32)
- # include <windows.h>
+ # ifndef INVALID_FILE_ATTRIBUTES
+ #  define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+ # endif
 -#elif defined (__CYGWIN__)
 -# include <windows.h>
 -# undef _WIN32
@@ -135,21 +135,12 @@
  #endif
  
 -#ifdef __CYGWIN__
--extern "C" void cygwin_conv_to_win32_path(const char *path, char *win32_path);
+-# include <sys/cygwin.h>
 -#endif
 -
  // getpwnam doesn't exist on Windows and Cray Xt3/Catamount
  // same for TIOCGWINSZ
  #if defined(_WIN32) || defined (__LIBCATAMOUNT__)
-@@ -1068,7 +1061,7 @@ bool SystemTools::SameFile(const char* f
- }
- 
- //----------------------------------------------------------------------------
--#if defined(_WIN32) || defined(__CYGWIN__)
-+#if defined(_WIN32)
- static bool WindowsFileExists(const char* filename)
- {
-   WIN32_FILE_ATTRIBUTE_DATA fd;
 @@ -1083,7 +1076,7 @@ bool SystemTools::FileExists(const char*
      {
      return false;
@@ -207,8 +198,8 @@
  }
  
  
---- origsrc/cmake-2.8.10/Source/kwsys/SystemTools.hxx.in	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-2.8.10/Source/kwsys/SystemTools.hxx.in	2013-03-16 23:10:30.185237900 -0500
+--- origsrc/cmake-3.0.2/Source/kwsys/SystemTools.hxx.in	2012-10-31 10:32:06.000000000 -0500
++++ src/cmake-3.0.2/Source/kwsys/SystemTools.hxx.in	2013-03-16 23:10:30.185237900 -0500
 @@ -277,15 +277,6 @@ public:
    static bool FileExists(const char* filename);
  
