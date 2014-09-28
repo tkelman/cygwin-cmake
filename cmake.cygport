@@ -26,16 +26,14 @@ PATCH_URI="
 
 PKG_NAMES="${NAME} ${NAME}-gui ${NAME}-doc emacs-cmake"
 cmake_CONTENTS="--exclude=cmake-gui.* usr/bin/ usr/share/aclocal/
-                usr/share/cmake*/completions/ usr/share/cmake*/editors/
-                usr/share/cmake*/include/ usr/share/cmake*/Modules/
-                usr/share/cmake*/Templates/ usr/share/man/"
+                usr/share/cmake*/ usr/share/man/"
 cmake_gui_SUMMARY="${SUMMARY} (GUI)"
 cmake_gui_REQUIRES=${NAME}
 cmake_gui_CONTENTS="etc/ usr/bin/cmake-gui.exe usr/share/applications/
                     usr/share/man/man1/cmake-gui.*
                     usr/share/mime/ usr/share/pixmaps/"
 cmake_doc_SUMMARY="${SUMMARY} (documentation)"
-cmake_doc_CONTENTS="usr/share/doc/ usr/share/cmake*/Help/"
+cmake_doc_CONTENTS="usr/share/doc/"
 emacs_cmake_CATEGORY="Editors"
 emacs_cmake_SUMMARY="${SUMMARY} (Emacs mode)"
 emacs_cmake_REQUIRES=${NAME}
