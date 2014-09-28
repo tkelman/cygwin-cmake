@@ -21,6 +21,7 @@ PATCH_URI="
 	2.8.12-ruby.patch
 	2.8.12-opengl.patch
 	3.0.2-tclsh.patch
+	3.0.2-ftp-test.patch
 "
 
 PKG_NAMES="${NAME} ${NAME}-gui ${NAME}-doc emacs-cmake"
