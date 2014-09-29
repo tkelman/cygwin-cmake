@@ -31,6 +31,7 @@ cmake_gui_SUMMARY="${SUMMARY} (GUI)"
 cmake_gui_REQUIRES=${NAME}
 cmake_gui_CONTENTS="etc/ usr/bin/cmake-gui.exe usr/share/applications/
                     usr/share/man/man1/cmake-gui.*
+                    usr/share/cmake*/Help/manual/cmake-gui.1.rst
                     usr/share/mime/ usr/share/pixmaps/"
 cmake_doc_SUMMARY="${SUMMARY} (documentation)"
 cmake_doc_CONTENTS="usr/share/doc/"
