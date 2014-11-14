@@ -1,7 +1,7 @@
 inherit emacs qt4
 
 NAME="cmake"
-VERSION=3.0.2
+VERSION=3.1.0-rc2
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Cross-platform makefile generation system"
@@ -12,16 +12,15 @@ of your choice. CMake is quite sophisticated: it is possible to support
 complex environments requiring system configuration, pre-processor generation,
 code generation, and template instantiation."
 HOMEPAGE="http://www.cmake.org/"
-SRC_URI="http://www.cmake.org/files/v3.0/cmake-${VERSION}.tar.gz"
+SRC_URI="http://www.cmake.org/files/v3.1/cmake-${VERSION}.tar.gz"
 
 PATCH_URI="
-	3.0.2-cygwin.patch
+	3.1.0-cygwin.patch
 	2.8.9-perl-libs.patch
 	2.8.12-gui-qt4.patch
 	2.8.12-ruby.patch
 	2.8.12-opengl.patch
 	3.0.2-tclsh.patch
-	3.0.2-ftp-test.patch
 "
 
 PKG_NAMES="${NAME} ${NAME}-gui ${NAME}-doc emacs-cmake"
@@ -48,7 +47,6 @@ src_compile() {
 		--datadir=/share/${NAME}-${VERSION} \
 		--docdir=/share/doc/${NAME} \
 		--mandir=/share/man \
-		--parallel=$(nproc) \
 		--qt-gui --qt-qmake=${QT4_QMAKE} \
 		--system-libs \
 		--sphinx-man --sphinx-html \

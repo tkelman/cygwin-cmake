@@ -1,6 +1,8 @@
---- origsrc/cmake-3.0.2/Source/cmFileCommand.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-3.0.2/Source/cmFileCommand.cxx	2013-03-16 22:55:11.306681100 -0500
-@@ -1002,7 +1002,7 @@ protected:
+diff --git a/Source/cmFileCommand.cxx b/Source/cmFileCommand.cxx
+index b0ddff4..481185c 100644
+--- a/Source/cmFileCommand.cxx
++++ b/Source/cmFileCommand.cxx
+@@ -1116,7 +1116,7 @@ protected:
    MatchProperties CollectMatchProperties(const char* file)
      {
      // Match rules are case-insensitive on some platforms.
@@ -9,9 +11,11 @@
      std::string lower = cmSystemTools::LowerCase(file);
      const char* file_to_match = lower.c_str();
  #else
---- origsrc/cmake-3.0.2/Source/cmInstallCommand.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-3.0.2/Source/cmInstallCommand.cxx	2013-03-16 22:56:21.008667800 -0500
-@@ -1090,7 +1090,7 @@ cmInstallCommand::HandleDirectoryMode(st
+diff --git a/Source/cmInstallCommand.cxx b/Source/cmInstallCommand.cxx
+index c3c9c55..077cbd8 100644
+--- a/Source/cmInstallCommand.cxx
++++ b/Source/cmInstallCommand.cxx
+@@ -1149,7 +1149,7 @@ cmInstallCommand::HandleDirectoryMode(std::vector<std::string> const& args)
        {
        literal_args += " REGEX \"";
      // Match rules are case-insensitive on some platforms.
@@ -20,8 +24,10 @@
        std::string regex = cmSystemTools::LowerCase(args[i]);
  #else
        std::string regex = args[i];
---- origsrc/cmake-3.0.2/Source/kwsys/Glob.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-3.0.2/Source/kwsys/Glob.cxx	2013-03-16 22:58:54.192429400 -0500
+diff --git a/Source/kwsys/Glob.cxx b/Source/kwsys/Glob.cxx
+index 5a96aed..9379e76 100644
+--- a/Source/kwsys/Glob.cxx
++++ b/Source/kwsys/Glob.cxx
 @@ -37,7 +37,7 @@
  #include <string.h>
  namespace KWSYS_NAMESPACE
@@ -31,9 +37,11 @@
  // On Windows and apple, no difference between lower and upper case
  # define KWSYS_GLOB_CASE_INDEPENDENT
  #endif
---- origsrc/cmake-2.8.11/Source/kwsys/SystemInformation.cxx	2013-05-15 12:38:13.000000000 -0500
-+++ src/cmake-2.8.11/Source/kwsys/SystemInformation.cxx	2013-07-08 01:57:31.216321800 -0500
-@@ -888,7 +888,7 @@ void SystemInformation::RunMemoryCheck()
+diff --git a/Source/kwsys/SystemInformation.cxx b/Source/kwsys/SystemInformation.cxx
+index 3e1a1ab..690a40f 100644
+--- a/Source/kwsys/SystemInformation.cxx
++++ b/Source/kwsys/SystemInformation.cxx
+@@ -910,7 +910,7 @@ void SystemInformation::RunMemoryCheck()
  // Hide implementation details in an anonymous namespace.
  namespace {
  // *****************************************************************************
@@ -42,7 +50,7 @@
  int LoadLines(
        FILE *file,
        kwsys_stl::vector<kwsys_stl::string> &lines)
-@@ -918,7 +918,7 @@ int LoadLines(
+@@ -946,7 +946,7 @@ int LoadLines(
    return nRead;
  }
  
@@ -51,7 +59,7 @@
  // *****************************************************************************
  int LoadLines(
        const char *fileName,
-@@ -957,7 +957,7 @@ int NameValue(
+@@ -985,7 +985,7 @@ int NameValue(
  }
  #endif
  
@@ -60,7 +68,7 @@
  // ****************************************************************************
  template<typename T>
  int GetFieldsFromFile(
-@@ -2869,7 +2869,6 @@ bool SystemInformationImplementation::Re
+@@ -3131,7 +3131,6 @@ bool SystemInformationImplementation::RetreiveInformationFromCpuInfoFile()
      pos = buffer.find("processor\t",pos+1);
      }
  
@@ -68,9 +76,9 @@
    // Find the largest physical id.
    int maxId = -1;
    kwsys_stl::string idc =
-@@ -2893,14 +2892,6 @@ bool SystemInformationImplementation::Re
-   this->NumberOfPhysicalCPU=static_cast<unsigned int>(
-     numberOfCoresPerCPU*(maxId+1));
+@@ -3164,14 +3163,6 @@ bool SystemInformationImplementation::RetreiveInformationFromCpuInfoFile()
+             atoi(this->ExtractValueFromCpuInfoFile(buffer,"ncpus active").c_str());
+     }
  
 -#else // __CYGWIN__
 -  // does not have "physical id" entries, neither "cpu cores"
@@ -83,7 +91,7 @@
    // gotta have one, and if this is 0 then we get a / by 0n
    // better to have a bad answer than a crash
    if(this->NumberOfPhysicalCPU <= 0)
-@@ -3086,7 +3077,7 @@ SystemInformationImplementation::GetHost
+@@ -3369,7 +3360,7 @@ SystemInformationImplementation::GetHostMemoryTotal()
    GlobalMemoryStatusEx(&statex);
    return statex.ullTotalPhys/1024;
  # endif
@@ -92,7 +100,7 @@
    SystemInformation::LongLong memTotal=0;
    int ierr=GetFieldFromFile("/proc/meminfo","MemTotal:",memTotal);
    if (ierr)
-@@ -3217,7 +3208,7 @@ SystemInformationImplementation::GetHost
+@@ -3500,7 +3491,7 @@ SystemInformationImplementation::GetHostMemoryUsed()
    GlobalMemoryStatusEx(&statex);
    return (statex.ullTotalPhys - statex.ullAvailPhys)/1024;
  # endif
@@ -101,7 +109,7 @@
    const char *names[3]={"MemTotal:","MemFree:",NULL};
    SystemInformation::LongLong values[2]={SystemInformation::LongLong(0)};
    int ierr=GetFieldsFromFile("/proc/meminfo",names,values);
-@@ -3276,7 +3267,7 @@ SystemInformationImplementation::GetProc
+@@ -3559,7 +3550,7 @@ SystemInformationImplementation::GetProcMemoryUsed()
      return -2;
      }
    return pmc.WorkingSetSize/1024;
@@ -110,7 +118,7 @@
    SystemInformation::LongLong memUsed=0;
    int ierr=GetFieldFromFile("/proc/self/status","VmRSS:",memUsed);
    if (ierr)
-@@ -3328,7 +3319,7 @@ SystemInformationImplementation::GetProc
+@@ -3611,7 +3602,7 @@ SystemInformationImplementation::GetProcessId()
  {
  #if defined(_WIN32)
    return GetCurrentProcessId();
@@ -119,11 +127,13 @@
    return getpid();
  #else
    return -1;
---- origsrc/cmake-3.0.2/Source/kwsys/SystemTools.cxx	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-3.0.2/Source/kwsys/SystemTools.cxx	2013-03-16 22:52:11.830415600 -0500
-@@ -75,19 +75,12 @@
- # ifndef INVALID_FILE_ATTRIBUTES
- #  define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+diff --git a/Source/kwsys/SystemTools.cxx b/Source/kwsys/SystemTools.cxx
+index e4c82d8..6064fd1 100644
+--- a/Source/kwsys/SystemTools.cxx
++++ b/Source/kwsys/SystemTools.cxx
+@@ -85,19 +85,12 @@
+ # if defined(_MSC_VER) && _MSC_VER >= 1800
+ #  define KWSYS_WINDOWS_DEPRECATED_GetVersionEx
  # endif
 -#elif defined (__CYGWIN__)
 -# include <windows.h>
@@ -141,7 +151,7 @@
  // getpwnam doesn't exist on Windows and Cray Xt3/Catamount
  // same for TIOCGWINSZ
  #if defined(_WIN32) || defined (__LIBCATAMOUNT__)
-@@ -1083,7 +1076,7 @@ bool SystemTools::FileExists(const char*
+@@ -1141,7 +1134,7 @@ bool SystemTools::FileExists(const kwsys_stl::string& filename)
      {
      return false;
      }
@@ -149,8 +159,8 @@
 +#if 0
    // Convert filename to native windows path if possible.
    char winpath[MAX_PATH];
-   if(SystemTools::PathCygwinToWin32(filename, winpath))
-@@ -1111,7 +1104,7 @@ bool SystemTools::FileExists(const char*
+   if(SystemTools::PathCygwinToWin32(filename.c_str(), winpath))
+@@ -1183,7 +1176,7 @@ bool SystemTools::FileExists(const kwsys_stl::string& filename, bool isFile)
  }
  
  //----------------------------------------------------------------------------
@@ -159,17 +169,17 @@
  bool SystemTools::PathCygwinToWin32(const char *path, char *win32_path)
  {
    SystemToolsTranslationMap::iterator i =
-@@ -3894,7 +3887,7 @@ bool SystemTools::LocateFileInDir(const
- bool SystemTools::FileIsFullPath(const char* in_name)
+@@ -4289,7 +4282,7 @@ bool SystemTools::FileIsFullPath(const char* in_name)
+ 
+ bool SystemTools::FileIsFullPath(const char* in_name, size_t len)
  {
-   kwsys_stl::string name = in_name;
 -#if defined(_WIN32) || defined(__CYGWIN__)
 +#if defined(_WIN32)
    // On Windows, the name must be at least two characters long.
-   if(name.length() < 2)
+   if(len < 2)
      {
-@@ -4712,9 +4705,6 @@ bool SystemTools::ParseURL( const kwsys_
- unsigned int SystemToolsManagerCount;
+@@ -5056,9 +5049,6 @@ bool SystemTools::ParseURL( const kwsys_stl::string& URL,
+ static unsigned int SystemToolsManagerCount;
  SystemToolsTranslationMap *SystemTools::TranslationMap;
  SystemToolsTranslationMap *SystemTools::LongPathMap;
 -#ifdef __CYGWIN__
@@ -178,7 +188,7 @@
  
  // SystemToolsManager manages the SystemTools singleton.
  // SystemToolsManager should be included in any translation unit
-@@ -4760,9 +4750,6 @@ void SystemTools::ClassInitialize()
+@@ -5104,9 +5094,6 @@ void SystemTools::ClassInitialize()
    // Allocate the translation map first.
    SystemTools::TranslationMap = new SystemToolsTranslationMap;
    SystemTools::LongPathMap = new SystemToolsTranslationMap;
@@ -188,7 +198,7 @@
  
    // Add some special translation paths for unix.  These are not added
    // for windows because drive letters need to be maintained.  Also,
-@@ -4817,9 +4804,6 @@ void SystemTools::ClassFinalize()
+@@ -5161,9 +5148,6 @@ void SystemTools::ClassFinalize()
  {
    delete SystemTools::TranslationMap;
    delete SystemTools::LongPathMap;
@@ -198,10 +208,12 @@
  }
  
  
---- origsrc/cmake-3.0.2/Source/kwsys/SystemTools.hxx.in	2012-10-31 10:32:06.000000000 -0500
-+++ src/cmake-3.0.2/Source/kwsys/SystemTools.hxx.in	2013-03-16 23:10:30.185237900 -0500
-@@ -277,15 +277,6 @@ public:
-   static bool FileExists(const char* filename);
+diff --git a/Source/kwsys/SystemTools.hxx.in b/Source/kwsys/SystemTools.hxx.in
+index beb2a7e..eacc22d 100644
+--- a/Source/kwsys/SystemTools.hxx.in
++++ b/Source/kwsys/SystemTools.hxx.in
+@@ -298,15 +298,6 @@ public:
+   static bool FileExists(const kwsys_stl::string& filename);
  
    /**
 -   * Converts Cygwin path to Win32 path. Uses dictionary container for
@@ -215,8 +227,8 @@
 -  /**
     * Return file length
     */
-   static unsigned long FileLength(const char *filename);
-@@ -887,9 +878,6 @@ private:
+   static unsigned long FileLength(const kwsys_stl::string& filename);
+@@ -942,9 +933,6 @@ private:
     */
    static SystemToolsTranslationMap *TranslationMap;
    static SystemToolsTranslationMap *LongPathMap;
