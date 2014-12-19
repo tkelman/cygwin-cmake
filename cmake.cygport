@@ -1,7 +1,7 @@
 inherit emacs qt4
 
 NAME="cmake"
-VERSION=3.1.0-rc2
+VERSION=3.1.0
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Cross-platform makefile generation system"
