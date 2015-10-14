@@ -1,8 +1,8 @@
 inherit emacs qt5
 
 NAME="cmake"
-VERSION=3.3.1
-RELEASE=2
+VERSION=3.3.2
+RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Cross-platform makefile generation system"
 DESCRIPTION="CMake is used to control the software compilation process using
@@ -23,6 +23,7 @@ PATCH_URI="
 	2.8.12-opengl.patch
 	3.0.2-tclsh.patch
 	3.2.3-generate-export-header.patch
+	0640-FindPkgConfig-remove-variable-dereference.patch
 "
 
 PKG_NAMES="${NAME} ${NAME}-gui ${NAME}-doc emacs-cmake"
