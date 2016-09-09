@@ -1,7 +1,7 @@
 inherit emacs qt5
 
 NAME="cmake"
-VERSION=3.3.2
+VERSION=3.6.2
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="Cross-platform makefile generation system"
@@ -12,14 +12,14 @@ of your choice. CMake is quite sophisticated: it is possible to support
 complex environments requiring system configuration, pre-processor generation,
 code generation, and template instantiation."
 HOMEPAGE="http://www.cmake.org/"
-SRC_URI="http://www.cmake.org/files/v3.3/cmake-${VERSION}.tar.gz"
+SRC_URI="http://www.cmake.org/files/v3.6/cmake-${VERSION}.tar.gz"
 
 PATCH_URI="
-	3.1.0-case-sensitivity.patch
-	3.1.0-cpuinfo.patch
-	3.1.0-cygwin-paths.patch
+	3.6.2-case-sensitivity.patch
+	3.6.2-cpuinfo.patch
+	3.6.2-cygwin-paths.patch
 	2.8.9-perl-libs.patch
-	2.8.12-ruby.patch
+	3.6.2-ruby.patch
 	2.8.12-opengl.patch
 	3.0.2-tclsh.patch
 	3.2.3-generate-export-header.patch
