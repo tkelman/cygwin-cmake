@@ -1,8 +1,8 @@
 diff --git a/Source/kwsys/SystemTools.cxx b/Source/kwsys/SystemTools.cxx
-index e4c82d8..6064fd1 100644
+index c6e668d..c867651 100644
 --- a/Source/kwsys/SystemTools.cxx
 +++ b/Source/kwsys/SystemTools.cxx
-@@ -85,19 +85,12 @@
+@@ -96,19 +96,12 @@
  # if defined(_MSC_VER) && _MSC_VER >= 1800
  #  define KWSYS_WINDOWS_DEPRECATED_GetVersionEx
  # endif
@@ -22,7 +22,7 @@ index e4c82d8..6064fd1 100644
  // getpwnam doesn't exist on Windows and Cray Xt3/Catamount
  // same for TIOCGWINSZ
  #if defined(_WIN32) || defined (__LIBCATAMOUNT__)
-@@ -1141,7 +1134,7 @@ bool SystemTools::FileExists(const kwsys_stl::string& filename)
+@@ -1217,7 +1210,7 @@ bool SystemTools::FileExists(const std::string& filename)
      {
      return false;
      }
@@ -31,7 +31,7 @@ index e4c82d8..6064fd1 100644
    // Convert filename to native windows path if possible.
    char winpath[MAX_PATH];
    if(SystemTools::PathCygwinToWin32(filename.c_str(), winpath))
-@@ -1183,7 +1176,7 @@ bool SystemTools::FileExists(const kwsys_stl::string& filename, bool isFile)
+@@ -1294,7 +1287,7 @@ bool SystemTools::TestFileAccess(const std::string& filename,
  }
  
  //----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ index e4c82d8..6064fd1 100644
  bool SystemTools::PathCygwinToWin32(const char *path, char *win32_path)
  {
    SystemToolsTranslationMap::iterator i =
-@@ -4289,7 +4282,7 @@ bool SystemTools::FileIsFullPath(const char* in_name)
+@@ -4559,7 +4552,7 @@ bool SystemTools::FileIsFullPath(const char* in_name)
  
  bool SystemTools::FileIsFullPath(const char* in_name, size_t len)
  {
@@ -49,30 +49,30 @@ index e4c82d8..6064fd1 100644
    // On Windows, the name must be at least two characters long.
    if(len < 2)
      {
-@@ -5056,9 +5049,6 @@ bool SystemTools::ParseURL( const kwsys_stl::string& URL,
- static unsigned int SystemToolsManagerCount;
- SystemToolsTranslationMap *SystemTools::TranslationMap;
- SystemToolsTranslationMap *SystemTools::LongPathMap;
+@@ -5372,9 +5365,6 @@ SystemToolsTranslationMap *SystemTools::TranslationMap;
+ #ifdef _WIN32
+ SystemToolsPathCaseMap *SystemTools::PathCaseMap;
+ #endif
 -#ifdef __CYGWIN__
 -SystemToolsTranslationMap *SystemTools::Cyg2Win32Map;
 -#endif
  
  // SystemToolsManager manages the SystemTools singleton.
  // SystemToolsManager should be included in any translation unit
-@@ -5104,9 +5094,6 @@ void SystemTools::ClassInitialize()
-   // Allocate the translation map first.
-   SystemTools::TranslationMap = new SystemToolsTranslationMap;
-   SystemTools::LongPathMap = new SystemToolsTranslationMap;
+@@ -5422,9 +5412,6 @@ void SystemTools::ClassInitialize()
+ #ifdef _WIN32
+   SystemTools::PathCaseMap = new SystemToolsPathCaseMap;
+ #endif
 -#ifdef __CYGWIN__
 -  SystemTools::Cyg2Win32Map = new SystemToolsTranslationMap;
 -#endif
  
    // Add some special translation paths for unix.  These are not added
    // for windows because drive letters need to be maintained.  Also,
-@@ -5161,9 +5148,6 @@ void SystemTools::ClassFinalize()
- {
-   delete SystemTools::TranslationMap;
-   delete SystemTools::LongPathMap;
+@@ -5481,9 +5468,6 @@ void SystemTools::ClassFinalize()
+ #ifdef _WIN32
+   delete SystemTools::PathCaseMap;
+ #endif
 -#ifdef __CYGWIN__
 -  delete SystemTools::Cyg2Win32Map;
 -#endif
@@ -80,11 +80,11 @@ index e4c82d8..6064fd1 100644
  
  
 diff --git a/Source/kwsys/SystemTools.hxx.in b/Source/kwsys/SystemTools.hxx.in
-index beb2a7e..eacc22d 100644
+index bba5a5c..1246ee5 100644
 --- a/Source/kwsys/SystemTools.hxx.in
 +++ b/Source/kwsys/SystemTools.hxx.in
-@@ -298,15 +298,6 @@ public:
-   static bool FileExists(const kwsys_stl::string& filename);
+@@ -333,15 +333,6 @@ public:
+                              TestFilePermissions permissions);
  
    /**
 -   * Converts Cygwin path to Win32 path. Uses dictionary container for
@@ -98,11 +98,11 @@ index beb2a7e..eacc22d 100644
 -  /**
     * Return file length
     */
-   static unsigned long FileLength(const kwsys_stl::string& filename);
-@@ -942,9 +933,6 @@ private:
-    */
-   static SystemToolsTranslationMap *TranslationMap;
-   static SystemToolsTranslationMap *LongPathMap;
+   static unsigned long FileLength(const std::string& filename);
+@@ -990,9 +981,6 @@ private:
+ #ifdef _WIN32
+   static SystemToolsPathCaseMap *PathCaseMap;
+ #endif
 -#ifdef __CYGWIN__
 -  static SystemToolsTranslationMap *Cyg2Win32Map;
 -#endif

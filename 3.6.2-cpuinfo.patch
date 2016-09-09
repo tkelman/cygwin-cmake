@@ -1,8 +1,8 @@
 diff --git a/Source/kwsys/SystemInformation.cxx b/Source/kwsys/SystemInformation.cxx
-index 3e1a1ab..690a40f 100644
+index 81fb2f9..fdef4f8 100644
 --- a/Source/kwsys/SystemInformation.cxx
 +++ b/Source/kwsys/SystemInformation.cxx
-@@ -910,7 +910,7 @@ void SystemInformation::RunMemoryCheck()
+@@ -916,7 +916,7 @@ void SystemInformation::RunMemoryCheck()
  // Hide implementation details in an anonymous namespace.
  namespace {
  // *****************************************************************************
@@ -10,8 +10,8 @@ index 3e1a1ab..690a40f 100644
 +#if defined(__linux) || defined(__APPLE__) || defined(__CYGWIN__)
  int LoadLines(
        FILE *file,
-       kwsys_stl::vector<kwsys_stl::string> &lines)
-@@ -946,7 +946,7 @@ int LoadLines(
+       std::vector<std::string> &lines)
+@@ -952,7 +952,7 @@ int LoadLines(
    return nRead;
  }
  
@@ -20,7 +20,7 @@ index 3e1a1ab..690a40f 100644
  // *****************************************************************************
  int LoadLines(
        const char *fileName,
-@@ -985,7 +985,7 @@ int NameValue(
+@@ -991,7 +991,7 @@ int NameValue(
  }
  #endif
  
@@ -29,22 +29,22 @@ index 3e1a1ab..690a40f 100644
  // ****************************************************************************
  template<typename T>
  int GetFieldsFromFile(
-@@ -3131,7 +3131,6 @@ bool SystemInformationImplementation::RetreiveInformationFromCpuInfoFile()
+@@ -3199,7 +3199,6 @@ bool SystemInformationImplementation::RetreiveInformationFromCpuInfoFile()
      pos = buffer.find("processor\t",pos+1);
      }
  
 -#ifdef __linux
    // Find the largest physical id.
    int maxId = -1;
-   kwsys_stl::string idc =
-@@ -3164,14 +3163,6 @@ bool SystemInformationImplementation::RetreiveInformationFromCpuInfoFile()
+   std::string idc =
+@@ -3232,14 +3231,6 @@ bool SystemInformationImplementation::RetreiveInformationFromCpuInfoFile()
              atoi(this->ExtractValueFromCpuInfoFile(buffer,"ncpus active").c_str());
      }
  
 -#else // __CYGWIN__
 -  // does not have "physical id" entries, neither "cpu cores"
 -  // this has to be fixed for hyper-threading.
--  kwsys_stl::string cpucount =
+-  std::string cpucount =
 -    this->ExtractValueFromCpuInfoFile(buffer,"cpu count");
 -  this->NumberOfPhysicalCPU=
 -    this->NumberOfLogicalCPU = atoi(cpucount.c_str());
@@ -52,7 +52,7 @@ index 3e1a1ab..690a40f 100644
    // gotta have one, and if this is 0 then we get a / by 0n
    // better to have a bad answer than a crash
    if(this->NumberOfPhysicalCPU <= 0)
-@@ -3369,7 +3360,7 @@ SystemInformationImplementation::GetHostMemoryTotal()
+@@ -3437,7 +3428,7 @@ SystemInformationImplementation::GetHostMemoryTotal()
    GlobalMemoryStatusEx(&statex);
    return statex.ullTotalPhys/1024;
  # endif
@@ -61,16 +61,46 @@ index 3e1a1ab..690a40f 100644
    SystemInformation::LongLong memTotal=0;
    int ierr=GetFieldFromFile("/proc/meminfo","MemTotal:",memTotal);
    if (ierr)
-@@ -3500,7 +3491,7 @@ SystemInformationImplementation::GetHostMemoryUsed()
+@@ -3568,29 +3559,17 @@ SystemInformationImplementation::GetHostMemoryUsed()
    GlobalMemoryStatusEx(&statex);
    return (statex.ullTotalPhys - statex.ullAvailPhys)/1024;
  # endif
 -#elif defined(__linux)
+-  // First try to use MemAvailable, but it only works on newer kernels
+-  const char *names2[3]={"MemTotal:","MemAvailable:",NULL};
+-  SystemInformation::LongLong values2[2]={SystemInformation::LongLong(0)};
+-  int ierr=GetFieldsFromFile("/proc/meminfo",names2,values2);
 +#elif defined(__linux) || defined(__CYGWIN__)
-   const char *names[3]={"MemTotal:","MemFree:",NULL};
-   SystemInformation::LongLong values[2]={SystemInformation::LongLong(0)};
-   int ierr=GetFieldsFromFile("/proc/meminfo",names,values);
-@@ -3559,7 +3550,7 @@ SystemInformationImplementation::GetProcMemoryUsed()
++  const char *names[3]={"MemTotal:","MemFree:",NULL};
++  SystemInformation::LongLong values[2]={SystemInformation::LongLong(0)};
++  int ierr=GetFieldsFromFile("/proc/meminfo",names,values);
+   if (ierr)
+     {
+-    const char *names4[5]={"MemTotal:","MemFree:","Buffers:","Cached:",NULL};
+-    SystemInformation::LongLong values4[4]={SystemInformation::LongLong(0)};
+-    ierr=GetFieldsFromFile("/proc/meminfo",names4,values4);
+-    if(ierr)
+-      {
+-      return ierr;
+-      }
+-    SystemInformation::LongLong &memTotal=values4[0];
+-    SystemInformation::LongLong &memFree=values4[1];
+-    SystemInformation::LongLong &memBuffers=values4[2];
+-    SystemInformation::LongLong &memCached=values4[3];
+-    return memTotal - memFree - memBuffers - memCached;
+-    }
+-  SystemInformation::LongLong &memTotal=values2[0];
+-  SystemInformation::LongLong &memAvail=values2[1];
+-  return memTotal - memAvail;
++    return ierr;
++    }
++  SystemInformation::LongLong &memTotal=values[0];
++  SystemInformation::LongLong &memFree=values[1];
++  return memTotal - memFree;
+ #elif defined(__APPLE__)
+   SystemInformation::LongLong psz=getpagesize();
+   if (psz<1)
+@@ -3638,7 +3617,7 @@ SystemInformationImplementation::GetProcMemoryUsed()
      return -2;
      }
    return pmc.WorkingSetSize/1024;
@@ -79,7 +109,7 @@ index 3e1a1ab..690a40f 100644
    SystemInformation::LongLong memUsed=0;
    int ierr=GetFieldFromFile("/proc/self/status","VmRSS:",memUsed);
    if (ierr)
-@@ -3611,7 +3602,7 @@ SystemInformationImplementation::GetProcessId()
+@@ -3722,7 +3701,7 @@ SystemInformationImplementation::GetProcessId()
  {
  #if defined(_WIN32)
    return GetCurrentProcessId();
