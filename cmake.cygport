@@ -22,8 +22,6 @@ PATCH_URI="
 	3.6.2-ruby.patch
 	2.8.12-opengl.patch
 	3.0.2-tclsh.patch
-	3.2.3-generate-export-header.patch
-	0640-FindPkgConfig-remove-variable-dereference.patch
 "
 
 PKG_NAMES="${NAME} ${NAME}-gui ${NAME}-doc emacs-cmake"
