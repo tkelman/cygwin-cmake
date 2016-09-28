@@ -1,0 +1,21 @@
+environment:
+    global:
+        CYG_ROOT: C:\cygwin64
+        CYG_MIRROR: http://cygwin.mirror.constant.com
+        CYG_CACHE: C:\cygwin64\var\cache\setup
+        CYG_BASH: C:\cygwin64\bin\bash
+
+cache:
+    - '%CYG_CACHE%'
+
+install:
+    - ps: 'Start-FileDownload "https://cygwin.com/setup-x86_64.exe" -FileName "setup-x86_64.exe"'
+    - 'setup-x86_64.exe --quiet-mode --no-shortcuts --only-site --root "%CYG_ROOT%" --site "%CYG_MIRROR%" --local-package-dir "%CYG_CACHE%" --packages cmake'
+    - '%CYG_BASH% -lc "cygcheck -dc cygwin"'
+
+build_script:
+    - 'echo Building...'
+    - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; which -a cmake"'
+    - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; cmake"'
+
+test: off
