@@ -16,6 +16,7 @@ install:
 build_script:
     - 'echo Building...'
     - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; which -a cmake"'
+    - '%CYG_BASH% -lc "echo $PATH"'
     - '%CYG_BASH% -lc "cd $APPVEYOR_BUILD_FOLDER; strace cmake"'
 
 test: off
